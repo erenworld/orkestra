@@ -17,6 +17,8 @@ const (
 	Failed
 )
 
+// A Task that a user wants to run on our cluster.
+// A Task can be in several states: pending, scheduled, running, completed, failed
 type Task struct {
 	ID			  uuid.UUID
 	ContainerId	  string
@@ -32,3 +34,10 @@ type Task struct {
 	FinishTime	  time.Time
 }
 
+// Tell the system to stop a task.
+type TaskEvent struct {
+	ID			uuid.UUID
+	State		State		// From state one to state two
+	Timestamp 	time.Time	// To record the time the event was requested
+	Task 		Task
+}
