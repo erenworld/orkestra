@@ -22,17 +22,16 @@ type Worker struct {
 	TaskCount 	int
 }
 
-// Handle running a task on the machine where the worker is running.
 func (w *Worker) RunTask() {
-	fmt.Println("Stats")
+	fmt.Println("Run task")
 }
 
 func (w *Worker) StartTask() {
-	fmt.Println("Stats")
+	fmt.Println("Start task")
 }
 
 func (w *Worker) StopTask() {
-	fmt.Println("Stats")
+	fmt.Println("Stop task")
 }
 
 func (w *Worker) CollectsStats() {
