@@ -1,11 +1,12 @@
 package worker
 
 import (
+	"fmt"
 	"orkestra/task"
 
-	"github.com/google/uuid"
 	"github.com/golang-collections/collections/queue"
-) 
+	"github.com/google/uuid"
+)
 
 // Run tasks as Docker containers
 // Accept tasks to run from a manager
@@ -19,4 +20,21 @@ type Worker struct {
 	Queue   	queue.Queue					// a map of UUIDs to tasks
 	Db			map[uuid.UUID]*task.Task   	// Tasks are handled in FIFO order  
 	TaskCount 	int
+}
+
+// Handle running a task on the machine where the worker is running.
+func (w *Worker) RunTask() {
+	fmt.Println("Stats")
+}
+
+func (w *Worker) StartTask() {
+	fmt.Println("Stats")
+}
+
+func (w *Worker) StopTask() {
+	fmt.Println("Stats")
+}
+
+func (w *Worker) CollectsStats() {
+	fmt.Println("Stats")
 }
