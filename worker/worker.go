@@ -63,6 +63,10 @@ func (w *Worker) StartTask(t task.Task) task.DockerResult {
 	return result
 }
 
+func (w *Worker) AddTask(t task.Task) {
+	w.Queue.Enqueue(t)
+}
+
 func (w *Worker) RunTask() {
 	fmt.Println("Run task")
 }
