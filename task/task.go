@@ -26,6 +26,13 @@ const (
 	Failed					// When a task fails.
 )
 
+var stateTransitionMap = map[State][]State{
+	Scheduled: 	[]State{Scheduled},
+	Running: 	[]State{Scheduled, Running, Failed},
+	Completed: 	[]State{},
+	Failed: 	[]State{},
+}
+
 // A Task that a user wants to run on our cluster (pending, scheduled, running, completed, failed).
 type Task struct {
 	ID			  uuid.UUID
