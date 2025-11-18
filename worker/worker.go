@@ -9,9 +9,7 @@ import (
 
 	"github.com/golang-collections/collections/queue"
 	"github.com/google/uuid"
-	"github.com/docker/docker/api/types/container"
-	"github.com/docker/docker/api/types/image"
-	"github.com/docker/docker/client")
+)
 
 // Run tasks as Docker containers.
 // Accept tasks to run from a manager.
