@@ -83,7 +83,7 @@ func main() {
 	fmt.Printf("\nworker: %v\n\n", w)
 	w.CollectsStats()
 	w.RunTask()
-	w.StartTask()
+	// w.StartTask()
 	// w.StopTask()
 
 	m := manager.Manager{

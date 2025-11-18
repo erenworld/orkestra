@@ -1,6 +1,6 @@
 package task
 
-func Contains(states []State, state) bool {
+func Contains(states []State, state State) bool {
     for _, s := range states {
         if s == state {
             return true

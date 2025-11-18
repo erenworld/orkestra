@@ -7,7 +7,6 @@ import (
 	"time"
 
 	"github.com/golang-collections/collections/queue"
-	"github.com/golangci/golangci-lint/pkg/result"
 	"github.com/google/uuid"
 )
 
@@ -18,7 +17,6 @@ import (
 
 // The worker maintains the state of its tasks by storing them in a database.
 // api -> task queue -> metrics -> runtime (docker start and stop) -> maintain state of its task by storing them in a db
-
 
 type Worker struct {
 	Name 		string
@@ -67,8 +65,36 @@ func (w *Worker) AddTask(t task.Task) {
 	w.Queue.Enqueue(t)
 }
 
-func (w *Worker) RunTask() {
-	fmt.Println("Run task")
+func (w *Worker) RunTask() task.DockerResult {
+	t := w.Queue.Dequeue()
+	if t == nil {
+		log.Printf("Queue is empty")
+		return task.DockerResult{Error: nil}
+	}
+
+	taskQueued := t.(task.Task)				// convert to the proper type
+	taskPersisted := w.Db[taskQueued.ID]	
+	if taskPersisted == nil {
+		taskPersisted = &taskQueued
+		w.Db[taskQueued.ID] = &taskQueued
+	}
+
+	var result task.DockerResult
+	if task.validStateTransition(taskPersisted.State, taskQueued.State) {
+		switch taskQueued.State {
+		case task.Scheduled:
+			result := w.StartTask(taskQueued)
+		case task.Completed:
+			result := w.StopTask(taskQueued)
+		default:
+			result.Error = errors.New("We should not get here")
+		}
+	} else {
+		err := fmt.Errorf("Invalid transition from %v to %v", taskPersisted.State, taskQueued.State)
+		result.Error = err
+	}
+
+	return result
 }
 
 
