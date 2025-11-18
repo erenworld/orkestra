@@ -1,6 +1,7 @@
 package worker
 
 import (
+	"errors"
 	"fmt"
 	"log"
 	"orkestra/task"
@@ -8,7 +9,9 @@ import (
 
 	"github.com/golang-collections/collections/queue"
 	"github.com/google/uuid"
-)
+	"github.com/docker/docker/api/types/container"
+	"github.com/docker/docker/api/types/image"
+	"github.com/docker/docker/client")
 
 // Run tasks as Docker containers.
 // Accept tasks to run from a manager.
@@ -72,7 +75,7 @@ func (w *Worker) RunTask() task.DockerResult {
 		return task.DockerResult{Error: nil}
 	}
 
-	taskQueued := t.(task.Task)				// convert to the proper type
+	taskQueued := t.(task.Task)
 	taskPersisted := w.Db[taskQueued.ID]	
 	if taskPersisted == nil {
 		taskPersisted = &taskQueued
@@ -80,12 +83,12 @@ func (w *Worker) RunTask() task.DockerResult {
 	}
 
 	var result task.DockerResult
-	if task.validStateTransition(taskPersisted.State, taskQueued.State) {
+	if task.ValidStateTransition(taskPersisted.State, taskQueued.State) {
 		switch taskQueued.State {
 		case task.Scheduled:
-			result := w.StartTask(taskQueued)
+			result = w.StartTask(taskQueued)
 		case task.Completed:
-			result := w.StopTask(taskQueued)
+			result = w.StopTask(taskQueued)
 		default:
 			result.Error = errors.New("We should not get here")
 		}

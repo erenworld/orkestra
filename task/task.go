@@ -177,3 +177,4 @@ func (d *Docker) Stop(id string) DockerResult {
 		Error: 	nil,
 	}
 }
+

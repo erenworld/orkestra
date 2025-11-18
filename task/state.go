@@ -9,6 +9,6 @@ func Contains(states []State, state State) bool {
     return false
 }
 
-func validStateTransition(src State, dest State) bool {
+func ValidStateTransition(src State, dest State) bool {
     return Contains(stateTransitionMap[src], dest)
 }
