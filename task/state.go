@@ -8,3 +8,7 @@ func Contains(states []State, state) bool {
     }
     return false
 }
+
+func validStateTransition(src State, dest State) bool {
+    return Contains(stateTransitionMap[src], dest)
+}
